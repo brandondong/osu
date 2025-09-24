@@ -700,7 +700,7 @@ namespace osu.Game
         /// </remarks>
         public void PresentBeatmap(IBeatmapSetInfo beatmap, Predicate<BeatmapInfo> difficultyCriteria = null)
         {
-            Logger.Log($"Beginning {nameof(PresentBeatmap)} with beatmap {beatmap}");
+            Logger.Log($"BRAND Beginning {nameof(PresentBeatmap)} with beatmap {beatmap}");
             Live<BeatmapSetInfo> databasedSet = null;
 
             if (beatmap.OnlineID > 0)
@@ -757,9 +757,10 @@ namespace osu.Game
                     }
                     else
                     {
+                        Logger.Log($"BRAND Started assigning {nameof(PresentBeatmap)} with beatmap {beatmap}");
                         Beatmap.Value = BeatmapManager.GetWorkingBeatmap(selection);
 
-                        Logger.Log($"Completing {nameof(PresentBeatmap)} with beatmap {beatmap} (maintaining ruleset)");
+                        Logger.Log($"BRAND Completing {nameof(PresentBeatmap)} with beatmap {beatmap} (maintaining ruleset)");
                     }
                 }
             }, validScreens: new[]

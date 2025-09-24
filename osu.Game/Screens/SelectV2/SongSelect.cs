@@ -390,7 +390,10 @@ namespace osu.Game.Screens.SelectV2
             };
 
             if (this.IsCurrentScreen())
+            {
+                // Logger.Log($"BRAND {nameof(Update)}");
                 updateDebounce();
+            }
         }
 
         #region Selection debounce
@@ -400,6 +403,7 @@ namespace osu.Game.Screens.SelectV2
 
         private void debounceQueueSelection(BeatmapInfo beatmap)
         {
+            Logger.Log($"BRAND {nameof(debounceQueueSelection)} title: {beatmap?.Metadata?.Title} isNull: {beatmap == null}");
             debounceQueuedSelection = beatmap;
             debounceElapsedTime = 0;
         }
@@ -421,19 +425,32 @@ namespace osu.Game.Screens.SelectV2
             debounceElapsedTime += elapsed;
 
             if (debounceElapsedTime >= debounceInterval)
+            {
                 performDebounceSelection();
+            }
+            else
+            {
+                // Logger.Log($"BRAND {nameof(updateDebounce)} choosing to wait, title: {debounceQueuedSelection?.Metadata?.Title}, debounceElapsedTime: {debounceElapsedTime}, elapsed: {elapsed}, clock: {Clock.ElapsedFrameTime}");
+            }
         }
 
         private void performDebounceSelection()
         {
             if (debounceQueuedSelection == null) return;
 
+            Logger.Log($"BRAND {nameof(performDebounceSelection)} title: {debounceQueuedSelection?.Metadata?.Title}");
+
             try
             {
                 if (Beatmap.Value.BeatmapInfo.Equals(debounceQueuedSelection))
+                {
+                    Logger.Log($"BRAND {nameof(performDebounceSelection)} already assigned title: {debounceQueuedSelection?.Metadata?.Title}");
                     return;
+                }
 
+                Logger.Log($"BRAND {nameof(performDebounceSelection)} started assigning title: {debounceQueuedSelection?.Metadata?.Title}");
                 Beatmap.Value = beatmaps.GetWorkingBeatmap(debounceQueuedSelection);
+                Logger.Log($"BRAND {nameof(performDebounceSelection)} finished assigning title: {debounceQueuedSelection?.Metadata?.Title}");
             }
             finally
             {
@@ -443,6 +460,7 @@ namespace osu.Game.Screens.SelectV2
 
         private void cancelDebounceSelection()
         {
+            Logger.Log($"BRAND {nameof(cancelDebounceSelection)}");
             debounceQueuedSelection = null;
             debounceElapsedTime = 0;
         }
@@ -525,6 +543,7 @@ namespace osu.Game.Screens.SelectV2
             if (!checkBeatmapValidForSelection(beatmap, carousel.Criteria))
                 return;
 
+            Logger.Log($"BRAND {nameof(SelectAndRun)} title: {beatmap?.Metadata?.Title}");
             // To ensure sanity, cancel any pending selection as we are about to force a selection.
             // Carousel selection will update to the forced selection via a call of `ensureGlobalBeatmapValid` below, or when song select becomes current again.
             cancelDebounceSelection();
