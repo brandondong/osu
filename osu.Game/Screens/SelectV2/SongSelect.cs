@@ -399,13 +399,15 @@ namespace osu.Game.Screens.SelectV2
         #region Selection debounce
 
         private BeatmapInfo? debounceQueuedSelection;
+        private BeatmapInfo? selectedBeatmapWhenQueueStarted;
         private double debounceElapsedTime;
 
         private void debounceQueueSelection(BeatmapInfo beatmap)
         {
-            Logger.Log($"BRAND {nameof(debounceQueueSelection)} title: {beatmap?.Metadata?.Title} isNull: {beatmap == null}");
             debounceQueuedSelection = beatmap;
+            selectedBeatmapWhenQueueStarted = Beatmap.Value.BeatmapInfo;
             debounceElapsedTime = 0;
+            Logger.Log($"BRAND {nameof(debounceQueueSelection)} title: {beatmap?.Metadata?.Title} current selected: {selectedBeatmapWhenQueueStarted?.Metadata?.Title}");
         }
 
         private void updateDebounce()
@@ -448,6 +450,12 @@ namespace osu.Game.Screens.SelectV2
                     return;
                 }
 
+                if (!Beatmap.Value.BeatmapInfo.Equals(selectedBeatmapWhenQueueStarted))
+                {
+                    Logger.Log($"BRAND {nameof(performDebounceSelection)} NOT EQUAL: {Beatmap.Value.BeatmapInfo?.Metadata?.Title} {selectedBeatmapWhenQueueStarted?.Metadata?.Title}");
+                    return;
+                }
+
                 Logger.Log($"BRAND {nameof(performDebounceSelection)} started assigning title: {debounceQueuedSelection?.Metadata?.Title}");
                 Beatmap.Value = beatmaps.GetWorkingBeatmap(debounceQueuedSelection);
                 Logger.Log($"BRAND {nameof(performDebounceSelection)} finished assigning title: {debounceQueuedSelection?.Metadata?.Title}");
@@ -462,6 +470,7 @@ namespace osu.Game.Screens.SelectV2
         {
             Logger.Log($"BRAND {nameof(cancelDebounceSelection)}");
             debounceQueuedSelection = null;
+            selectedBeatmapWhenQueueStarted = null;
             debounceElapsedTime = 0;
         }
 
