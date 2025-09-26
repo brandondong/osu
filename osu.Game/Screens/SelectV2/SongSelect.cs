@@ -71,7 +71,7 @@ namespace osu.Game.Screens.SelectV2
         ///
         /// This is intentionally slightly higher than key repeat, but low enough to not impede user experience.
         /// </summary>
-        public const int SELECTION_DEBOUNCE = 150;
+        public const int SELECTION_DEBOUNCE = 500;
 
         /// <summary>
         /// A general "global" debounce to be applied to anything aggressive difficulty calculation at song select,

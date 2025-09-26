@@ -18,6 +18,9 @@ using osu.Framework.Graphics.UserInterface;
 using osu.Framework.Input;
 using osu.Framework.Screens;
 using osu.Framework.Testing;
+using osu.Framework.Bindables;
+using osu.Framework.Graphics.Textures;
+using osu.Framework.Platform;
 using osu.Game.Beatmaps;
 using osu.Game.Collections;
 using osu.Game.Configuration;
@@ -561,6 +564,7 @@ namespace osu.Game.Tests.Visual.Navigation
         [Test]
         public void TestLastScoreNotNullAfterExitingPlayer()
         {
+            AddStep("Change thread mode to multi threaded", () => { Game.Dependencies.Get<FrameworkConfigManager>().SetValue(FrameworkSetting.ExecutionMode, ExecutionMode.MultiThreaded); });
             AddUntilStep("last play null", getLastPlay, () => Is.Null);
 
             var getOriginalPlayer = playToCompletion();
