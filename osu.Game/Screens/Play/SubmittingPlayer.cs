@@ -231,6 +231,7 @@ namespace osu.Game.Screens.Play
                     realmBeatmap.LastPlayed = DateTimeOffset.Now;
             });
 
+            Logger.Log($"BRAND {nameof(StartGameplay)} before spectator begin playing");
             spectatorClient.BeginPlaying(token, GameplayState, Score);
         }
 
